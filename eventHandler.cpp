@@ -1,4 +1,6 @@
 #include <SDL2/SDL.h>
+#include <stdio.h>
+#include <iostream>
 
 enum KeyPressSurfaces {
     KEY_PRESS_SURFACE_DEFAULT,
@@ -21,6 +23,7 @@ namespace EventHandler {
             } else if (e.type == SDL_KEYDOWN) {
                 switch (e.key.keysym.sym){
                     case SDLK_UP:
+                        std::cout << "Testing\n";
                         break;
                     case SDLK_DOWN:
                         break;
