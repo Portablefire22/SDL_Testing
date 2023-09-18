@@ -1,20 +1,9 @@
-
-#include <SDL2/SDL_error.h>
-#include <SDL2/SDL_render.h>
-#include <SDL2/SDL_stdinc.h>
-#include <SDL2/SDL_surface.h>
-#include <SDL2/SDL_timer.h>
-#include <SDL2/SDL_video.h>
-#include <cstddef>
-#include <stdio.h>
-#include <format>
-#include <SDL2/SDL.h>
-#include <iostream>
-#include <string>
-#include "Rendering.cpp"
-#include "eventHandler.cpp"
 #include "definitions.h"
-#include "Entity.cpp"
+/*#include "Entity.cpp"
+#include "Rendering.cpp"
+#include "eventHandler.cpp"*/
+
+
 // Rendered Window 
 SDL_Window* global_Window = NULL;
 
@@ -24,6 +13,10 @@ SDL_Surface* global_ScreenSurface = NULL;
 SDL_Surface* global_HelloWorldImage = NULL;
 
 SDL_Renderer* global_Renderer = NULL;
+
+GameEntity entities[64];
+
+int ArraySize = 0;
 
 // Initialise SDL 
 bool Init_SDL() {
@@ -71,7 +64,8 @@ void close(){
 int main ( int argc, char* args[]) { 
     bool quit = false;
     if(!Init_SDL()){
-        std::cout << "Failed to initialise!\n";
+        std::cout << "\nFailed to initialise!\n";
+        std::cout << SDL_GetError();
     } else {
         //global_HelloWorldImage = ObjectRender::loadMedia("Image.bmp");
         if(global_HelloWorldImage != NULL){
@@ -87,19 +81,22 @@ int main ( int argc, char* args[]) {
             Uint32 lastUpdate = SDL_GetTicks();
 
             GameEntity player;
-
+            player.setValues("Player", 10, 10, std::make_tuple(0xFF, 0x00, 0x00, 0xFF) );
+            entities[ArraySize] = player;
+            ArraySize = 1;
+            std::cout << "Array Size: " << ArraySize << std::endl;
             // Game loop
             while(!quit) {
                 // Handle events in the queue 
                 Uint64 start = SDL_GetPerformanceCounter();
                 
                 Uint32 current = SDL_GetTicks();
-                quit = EventHandler::getEvent(e);
-                
+                quit = EventHandler::getEvent(e, player );
+
                 // Calculate deltaTime in seconds
                 float deltaTime = (current - lastUpdate) / 1000.0f;
                 std::cout << "DeltaTime: " << std::to_string(deltaTime) << std::endl;
-                ObjectRender::RenderObject(global_Renderer, player);
+                ObjectRender::RenderObject(global_Renderer, entities, ArraySize);
                 lastUpdate = current;
 
                 Uint64 end = SDL_GetPerformanceCounter();

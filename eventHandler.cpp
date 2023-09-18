@@ -1,6 +1,4 @@
-#include <SDL2/SDL.h>
-#include <stdio.h>
-#include <iostream>
+
 
 enum KeyPressSurfaces {
     KEY_PRESS_SURFACE_DEFAULT,
@@ -16,24 +14,13 @@ namespace ManageInput {
 }
 
 namespace EventHandler {
-    bool getEvent(SDL_Event e){
+    bool getEvent(SDL_Event e, GameEntity& player){
         while (SDL_PollEvent(&e) != 0){
             if(e.type == SDL_QUIT) {
                 return true;
             } else if (e.type == SDL_KEYDOWN) {
-                switch (e.key.keysym.sym){
-                    case SDLK_UP:
-                        std::cout << "Testing\n";
-                        break;
-                    case SDLK_DOWN:
-                        break;
-                    case SDLK_LEFT:
-                        break;
-                    case SDLK_RIGHT:
-                        break;
-                    default:
-                        break;
-                }
+               // Player handles keypresses 
+               player.EntityInput(e);
             }
 
         }

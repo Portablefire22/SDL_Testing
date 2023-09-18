@@ -1,9 +1,3 @@
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_render.h>
-#include <iostream>
-#include <string>
-#include "definitions.h"
-#include "Entity.cpp"
 
 namespace ObjectRender {
     SDL_Surface* loadMedia(std::string textureName) {
@@ -26,12 +20,17 @@ namespace ObjectRender {
     // Render an object with given paramenters 
 
     // Testing with a placrholder rectangle
-    void RenderObject(SDL_Renderer* renderer, GameEntity entity) {
+    void RenderObject(SDL_Renderer* renderer, GameEntity entities[64], int ArraySize) {
         ClearScreen(renderer);
-        SDL_Rect fillRect = { SCREEN_WIDTH / 4, SCREEN_HEIGHT / 4, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
-        SDL_SetRenderDrawColor(renderer, 0xFF, 0x00, 0x00, 0xFF);
-        SDL_RenderFillRect(renderer, &fillRect);
-
+        std::cout << "Array Size: " << ArraySize << std::endl;
+        for(int i = 0; i < ArraySize; i++){
+            // X position, Y position, width, height
+            std::cout << entities[i].width << std::endl;
+            SDL_Rect fillRect = {entities[i].posX, entities[i].posY, entities[i].width, entities[i].height};
+            SDL_SetRenderDrawColor(renderer, entities[i].red,entities[i].green,entities[i].blue,entities[i].alpha);
+            SDL_RenderFillRect(renderer, &fillRect);
+            std::cout << "Rendering: " << entities[i].id << std::endl;
+        }
         SDL_RenderPresent(renderer);
     }
 
